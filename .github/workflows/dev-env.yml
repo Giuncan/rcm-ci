@@ -38,8 +38,13 @@ jobs:
       # Runs a single command using the runners shell
       - name: Install python locally
         run: |
-         mkdir python
-         curl -o python.zip https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-amd64.zip
-         tar -xf python.zip -C python
-         ls python
-         python/python.exe --version
+         choco install --no-progress innoextract
+         curl -o python.exe https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-amd64.exe
+         innoextract python.exe
+         ls
+         ls app
+         # ls python
+         # python\python.exe --version
+         # python\python.exe -m venv venv
+         # venv\Scripts\activate.bat
+
