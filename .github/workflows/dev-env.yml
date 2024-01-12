@@ -140,6 +140,7 @@ jobs:
           # scoop install smallstep/step
           Invoke-WebRequest -URI https://dl.smallstep.com/cli/docs-cli-install/latest/step_windows_amd64.zip -OutFile step.zip
           Expand-Archive -LiteralPath .\step.zip -DestinationPath .
+          dir 
           step\bin\step.exe version       
           step\bin\step.exe ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint 2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd
           dir .step
