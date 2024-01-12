@@ -25,6 +25,9 @@ env:
   SMALLSTEP_DOWNLOAD: "http://github.com/smallstep/cli/releases/download/"
   CINECA_STEP_FINGERPRINT: "2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd"
 
+  GIT_VERSION: "2.43.0"
+  GIT_DOWNLOAD: "https://github.com/git-for-windows/git/releases/download/"
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -110,7 +113,7 @@ jobs:
         uses: actions/cache@v3.3.3
         id: cache-turbovnc
         with:
-          path: turbovnc
+          path: dummy
           key: turbovnc-${{ matrix.TURBOVNC_VERSION }}-${{ runner.os }}
 
       - name: Extract turbovnc
@@ -124,17 +127,17 @@ jobs:
          innoextract turbovnc.exe
 
          # Create `external\turbovnc\bin` and copy all files there
-         mkdir $env:TURBOVNC_EXTERNAL
-         mv app $env:TURBOVNC_EXTERNAL/bin
+         mkdir dymmy/$env:TURBOVNC_EXTERNAL
+         mv app dummy/$env:TURBOVNC_EXTERNAL/bin
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
           name: turbovnc-${{ matrix.TURBOVNC_VERSION }}-${{ runner.os }}
           path: |
-            RCM/
+            dummy/
 
-  smallstep:     
+  cineca-extra:
     runs-on: windows-latest
     steps:
       - name: Cache step
@@ -147,8 +150,9 @@ jobs:
       - name: Install step
         if: ${{ steps.cache-step.outputs.cache-hit != 'true' }}
         run: |
-          Write-Output ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip
-          Invoke-WebRequest -URI ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip -OutFile step.zip
+          $URL = ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip
+          Write-Output $URL
+          Invoke-WebRequest -URI $URL -OutFile step.zip
           Expand-Archive -LiteralPath .\step.zip -DestinationPath .
           mv step* step
 
@@ -165,14 +169,32 @@ jobs:
           step\bin\step.exe ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint $env:CINECA_STEP_FINGERPRINT
           Copy-Item -Path $env:USERPROFILE\.step -Destination .\.step -Recurse -Force
 
+      - name: Cache git
+        uses: actions/cache@v3.3.3
+        id: cache-git
+        with:
+          path: git
+          key: git-${{ env.GIT_VERSION }}-${{ runner.os }}
+
+      - name: Install git
+        if: ${{ steps.cache-git.outputs.cache-hit != 'true' }}
+        run: |
+          choco install --no-progress 7zip
+          $URL = ${{ env.GIT_DOWNLOAD }}/v${{ env.GIT_VERSION }}.windows.1/PortableGit-${{ env.GIT_VERSION }}-64-bit.7z.exe
+          Write-Output $URL
+          Invoke-WebRequest -URI $URL -OutFile git.7zip
+          7z.exe x -ogit git.7zip
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: smallstep-${{ env.SMALLSTEP_VERSION }}-CINECA-${{ runner.os }}
+          name: CINECA-extra-step-${{ env.SMALLSTEP_VERSION }}-git-${{ env.GIT_DOWNLOAD }}-${{ runner.os }}
           path: |
             step
             .step
+            git
 
+          
   pyinstaller:     
     needs: [python-env, turbovnc]
     runs-on: windows-latest
