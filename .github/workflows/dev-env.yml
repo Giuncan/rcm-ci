@@ -144,7 +144,7 @@ jobs:
           dir
           step\bin\step.exe version
           step\bin\step.exe ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint 2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd
-          dir .step
+          dir $env:USERPROFILE\.step
 
       # - name: Upload a Build Artifact
       #   uses: actions/upload-artifact@v4.0.0
