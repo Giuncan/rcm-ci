@@ -13,22 +13,16 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: "3.10.11"
+  TURBOVNC_VERSION: "3.1"
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    strategy:
-      matrix:
-        os:
-        - windows-latest
-        # - ubuntu-latest	
-        # - ubuntu-20.04
-        # - macos-latest
-        python-version:
-        - '3.10.11'
-          
+  python-env:
     # The type of runner that the job will run on
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -40,14 +34,14 @@ jobs:
         id: cache-python
         with:
           path: python
-          key: python-${{ matrix.python-version }}
+          key: python-${{ env.PYTHON_VERSION }}
 
       - name: Install python locally
         if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
         run: |
           git clone https://github.com/pyenv-win/pyenv-win.git .pyenv
-          .\.pyenv\pyenv-win\bin\pyenv.bat install ${{ matrix.python-version }}
-          mv .pyenv\pyenv-win\versions\${{ matrix.python-version }} python
+          .\.pyenv\pyenv-win\bin\pyenv.bat install ${{ env.PYTHON_VERSION }}
+          mv .pyenv\pyenv-win\versions\${{ env.PYTHON_VERSION }} python
           ls python
           python\python.exe --version
 
@@ -56,7 +50,7 @@ jobs:
         id: cache-venv
         with:
           path: venv
-          key: venv-${{ matrix.python-version }}
+          key: venv-${{ env.PYTHON_VERSION }}
 
       - name: Install venv
         if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
@@ -88,8 +82,38 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
+          name: python-dev-env-${{ runner.os }}
           path: |
             python
             venv
             adapt-python-build-env.ps1
             !**/__pycache__/**
+
+  externals:     
+    runs-on: windows-latest
+    steps:
+      - name: Cache turbovnc
+        uses: actions/cache@v3.3.3
+        id: cache-turbovnc
+        with:
+          path: turbovnc
+          key: -${{ env.TURBOVNC_VERSION }}
+
+      - name: Install externals WINDOWS
+        run: |        
+         # Download exe
+         curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/${{ env.TURBOVNC_VERSION }}/TurboVNC-${{ env.TURBOVNC_VERSION }}-x64.exe
+         
+         # Extract file from exe
+         choco install --no-progress innoextract
+         innoextract turbovnc.exe
+         
+         # Create `external\turbovnc\bin` and copy all files there
+         mv app turbovnc
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: external-${{ runner.os }}
+          path: |
+            turbovnc
