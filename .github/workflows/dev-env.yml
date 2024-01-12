@@ -101,7 +101,7 @@ jobs:
           key: turbovnc-${{ env.TURBOVNC_VERSION }}
 
       - name: Extract turbovnc
-        if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
+        if: ${{ steps.cache-turbovnc.outputs.cache-hit != 'true' }}
         run: |        
          # Download exe
          Invoke-WebRequest -URI $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe -OutFile turbovnc.exe 
@@ -133,13 +133,15 @@ jobs:
       - name: Install externals WINDOWS
         # if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
         run: |
-          iwr -useb get.scoop.sh | iex
-          scoop help
-          scoop install git
-          scoop bucket add smallstep https://github.com/smallstep/scoop-bucket.git
-          scoop install smallstep/step
-          step ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint 2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd
-          Get-Command step
+          # iwr -useb get.scoop.sh | iex
+          # scoop help
+          # scoop install git
+          # scoop bucket add smallstep https://github.com/smallstep/scoop-bucket.git
+          # scoop install smallstep/step
+          Invoke-WebRequest -URI https://dl.smallstep.com/cli/docs-cli-install/latest/step_windows_amd64.zip -OutFile step.zip
+          Expand-Archive -LiteralPath .\step.zip -DestinationPath .
+          step\bin\step.exe version       
+          step\bin\step.exe ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint 2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd
           dir .step
 
       # - name: Upload a Build Artifact
