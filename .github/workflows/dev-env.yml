@@ -188,7 +188,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: CINECA-extra-step-${{ env.SMALLSTEP_VERSION }}-git-${{ env.GIT_DOWNLOAD }}-${{ runner.os }}
+          name: CINECA-extra-step-${{ env.SMALLSTEP_VERSION }}-git-${{ env.GIT_VERSION }}-${{ runner.os }}
           path: |
             step
             .step
