@@ -39,7 +39,7 @@ jobs:
         id: cache-python
         with:
           path: python
-          key: python-${{ env.PYTHON_VERSION }}
+          key: python-${{ env.PYTHON_VERSION }}-${{ runner.os }}
 
       - name: Install python locally
         if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
@@ -55,7 +55,7 @@ jobs:
         id: cache-venv
         with:
           path: venv
-          key: venv-${{ env.PYTHON_VERSION }}
+          key: venv-${{ env.PYTHON_VERSION }}-${{ runner.os }}
 
       - name: Install venv
         if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
@@ -108,7 +108,7 @@ jobs:
         id: cache-turbovnc
         with:
           path: turbovnc
-          key: turbovnc-${{ matrix.TURBOVNC_VERSION }}
+          key: turbovnc-${{ matrix.TURBOVNC_VERSION }}-${{ runner.os }}
 
       - name: Extract turbovnc
         if: ${{ steps.cache-turbovnc.outputs.cache-hit != 'true' }}
@@ -138,7 +138,7 @@ jobs:
         id: cache-step
         with:
           path: step
-          key: step-${{ env.SMALLSTEP_VERION }}
+          key: step-${{ env.SMALLSTEP_VERION }}-${{ runner.os }}
 
       - name: Install step
         if: ${{ steps.cache-step.outputs.cache-hit != 'true' }}
@@ -146,14 +146,14 @@ jobs:
           Write-Output ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip
           Invoke-WebRequest -URI ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip -OutFile step.zip
           Expand-Archive -LiteralPath .\step.zip -DestinationPath .
-          mv step_windows* step
+          mv step* step
 
       - name: Cache .step
         uses: actions/cache@v3.3.3
         id: cache-dot-step
         with:
           path: .step
-          key: dot-step-${{ env.CINECA_STEP_FINGERPRINT }}
+          key: dot-step-${{ env.CINECA_STEP_FINGERPRINT }}-${{ runner.os }}
 
       - name: Install step
         if: ${{ steps.cache-dot-step.outputs.cache-hit != 'true' }}
