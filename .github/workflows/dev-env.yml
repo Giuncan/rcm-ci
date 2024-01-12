@@ -35,17 +35,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      # - name: Install python locally
-      #   run: |
-      #     git clone https://github.com/pyenv-win/pyenv-win.git .pyenv
-      #     .\.pyenv\pyenv-win\bin\pyenv.bat install ${{ matrix.python-version }}
-      #     mv .pyenv\pyenv-win\versions\${{ matrix.python-version }} python
-      #     ls python
-      #     python\python.exe --version
-      #     python\python.exe -m venv venv
-      #     venv\Scripts\Activate.ps1
-      #     pip install numpy
+      - name: Install python locally
+        run: |
+          git clone https://github.com/pyenv-win/pyenv-win.git .pyenv
+          .\.pyenv\pyenv-win\bin\pyenv.bat install ${{ matrix.python-version }}
+          mv .pyenv\pyenv-win\versions\${{ matrix.python-version }} python
+          ls python
+          python\python.exe --version
+
+      - name: Install venv
+        run: |
+          python\python.exe -m venv venv
+          venv\Scripts\Activate.ps1
+          pip install numpy
 
       - name: Create script to port python and venv into another machine
         run : |
@@ -67,16 +69,11 @@ jobs:
          }
          '@ | Out-File -FilePath adapt-python-build-env.ps1
 
-      # - name: Upload a Build Artifact
-      #   uses: actions/upload-artifact@v4.0.0
-      #   with:
-      #     path: |
-      #       python
-      #       venv
-      #       adapt-python-build-env.ps1
-      #       !**/__pycache__/**
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
           path: |
+            python
+            venv
             adapt-python-build-env.ps1
+            !**/__pycache__/**
