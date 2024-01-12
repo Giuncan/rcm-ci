@@ -131,7 +131,6 @@ jobs:
             turbovnc
 
   smallstep:     
-    needs: [python-env, turbovnc]
     runs-on: windows-latest
     steps:
       - name: Cache step
@@ -170,3 +169,25 @@ jobs:
             step
             .step
 
+  pyinstaller:     
+    needs: [python-env, turbovnc]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        TURBOVNC_VERSION:
+        - '3.1'
+        - '2.2.7'
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dev-env-${{ runner.os }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: turbovnc-${{ matrix.TURBOVNC_VERSION }}-${{ runner.os }}
+     
+      - name: Install step
+        run: dir
