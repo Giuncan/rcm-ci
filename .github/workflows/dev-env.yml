@@ -104,12 +104,15 @@ jobs:
         run: |        
          # Download exe
          echo $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
-         curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
-         
+         # curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
+         Invoke-WebRequest -URI $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe -OutFile turbovnc.exe 
+         dir .
+
          # Extract file from exe
          choco install --no-progress innoextract
          innoextract turbovnc.exe
          dir .
+
          # Create `external\turbovnc\bin` and copy all files there
          mv app turbovnc
 
