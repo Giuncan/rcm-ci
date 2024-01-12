@@ -143,8 +143,8 @@ jobs:
       - name: Install step
         if: ${{ steps.cache-step.outputs.cache-hit != 'true' }}
         run: |
-          Write-Output 
-          Invoke-WebRequest -URI $env:SMALLSTEP_DOWNLOAD/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip -OutFile step.zip
+          Write-Output ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip
+          Invoke-WebRequest -URI ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip -OutFile step.zip
           Expand-Archive -LiteralPath .\step.zip -DestinationPath .
           mv step_windows* step
 
