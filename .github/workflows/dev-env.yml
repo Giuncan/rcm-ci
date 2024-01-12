@@ -103,6 +103,8 @@ jobs:
       - name: Install externals WINDOWS
         run: |        
          # Download exe
+         echo turbovnc.exe $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
+
          curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
          
          # Extract file from exe
