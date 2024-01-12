@@ -127,7 +127,7 @@ jobs:
          innoextract turbovnc.exe
 
          # Create `external\turbovnc\bin` and copy all files there
-         mkdir dymmy/$env:TURBOVNC_EXTERNAL
+         mkdir dummy/$env:TURBOVNC_EXTERNAL
          mv app dummy/$env:TURBOVNC_EXTERNAL/bin
 
       - name: Upload a Build Artifact
