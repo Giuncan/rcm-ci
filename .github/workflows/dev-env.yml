@@ -51,7 +51,15 @@ jobs:
           ls python
           python\python.exe --version
 
+      - name: Cache venv
+        uses: actions/cache@v3.3.3
+        id: cache-venv
+        with:
+          path: venv
+          key: venv-${{ matrix.python-version }}
+
       - name: Install venv
+        if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
         run: |
           python\python.exe -m venv venv
           venv\Scripts\Activate.ps1
