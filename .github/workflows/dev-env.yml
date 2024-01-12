@@ -131,6 +131,7 @@ jobs:
             turbovnc
 
   smallstep:     
+    needs: [python-env, turbovnc]
     runs-on: windows-latest
     steps:
       - name: Cache step
@@ -168,3 +169,4 @@ jobs:
           path: |
             step
             .step
+
