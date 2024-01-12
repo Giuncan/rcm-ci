@@ -19,4 +19,4 @@ jobs:
       - name: Run a one-line script
         run: |
           Get-Command git
-          dir C:\Program Files\Git -Recurse
+          dir "C:\Program Files\Git" -Recurse
