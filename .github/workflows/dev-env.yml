@@ -133,7 +133,14 @@ jobs:
       - name: Install externals WINDOWS
         # if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
         run: |
-         scoop help
+          iwr -useb get.scoop.sh | iex
+          scoop help
+          scoop install git
+          scoop bucket add smallstep https://github.com/smallstep/scoop-bucket.git
+          scoop install smallstep/step
+          step ca bootstrap --ca-url=https://sshproxy.hpc.cineca.it --fingerprint 2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd
+          Get-Command step
+          dir .step
 
       # - name: Upload a Build Artifact
       #   uses: actions/upload-artifact@v4.0.0
