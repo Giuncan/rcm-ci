@@ -15,8 +15,11 @@ on:
 
 env:
   PYTHON_VERSION: "3.10.11"
+
   # TURBOVNC_VERSION: "3.1"
   TURBOVNC_DOWNLOAD: "https://github.com/TurboVNC/turbovnc/releases/download"
+  TURBOVNC_EXTERNAL: "RCM/rcm/client/external/turbovnc"
+
   # https://github.com/smallstep/scoop-bucket/blob/main/step.json
   SMALLSTEP_VERSION: "0.24.4"
   SMALLSTEP_DOWNLOAD: "http://github.com/smallstep/cli/releases/download/"
@@ -121,14 +124,15 @@ jobs:
          innoextract turbovnc.exe
 
          # Create `external\turbovnc\bin` and copy all files there
-         mv app turbovnc
+         mkdir $env:TURBOVNC_EXTERNAL
+         mv app $env:TURBOVNC_EXTERNAL/bin
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
           name: turbovnc-${{ matrix.TURBOVNC_VERSION }}-${{ runner.os }}
           path: |
-            turbovnc
+            RCM/
 
   smallstep:     
     runs-on: windows-latest
@@ -138,7 +142,7 @@ jobs:
         id: cache-step
         with:
           path: step
-          key: step-${{ env.SMALLSTEP_VERION }}-${{ runner.os }}
+          key: step-${{ env.SMALLSTEP_VERSION }}-${{ runner.os }}
 
       - name: Install step
         if: ${{ steps.cache-step.outputs.cache-hit != 'true' }}
@@ -164,7 +168,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: smallstep-${{ env.SMALLSTEP_VERION }}-CINECA-${{ runner.os }}
+          name: smallstep-${{ env.SMALLSTEP_VERSION }}-CINECA-${{ runner.os }}
           path: |
             step
             .step
