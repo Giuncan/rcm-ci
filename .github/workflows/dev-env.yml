@@ -43,11 +43,23 @@ jobs:
           ls python
           python\python.exe --version
 
+      - name: Cache python
+        uses: actions/cache@v3.3.3
+        with:
+          path: python
+          key: python-${{ matrix.python-version }}
+
       - name: Install venv
         run: |
           python\python.exe -m venv venv
           venv\Scripts\Activate.ps1
           pip install numpy
+
+      - name: Cache venv
+        uses: actions/cache@v3.3.3
+        with:
+          path: venv
+          key: venv-${{ matrix.python-version }}
 
       - name: Create script to port python and venv into another machine
         run : |
