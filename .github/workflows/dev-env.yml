@@ -22,11 +22,11 @@ env:
 
   # https://github.com/smallstep/scoop-bucket/blob/main/step.json
   SMALLSTEP_VERSION: "0.24.4"
-  SMALLSTEP_DOWNLOAD: "http://github.com/smallstep/cli/releases/download/"
+  SMALLSTEP_DOWNLOAD: "http://github.com/smallstep/cli/releases/download"
   CINECA_STEP_FINGERPRINT: "2ae1543202304d3f434bdc1a2c92eff2cd2b02110206ef06317e70c1c1735ecd"
 
   GIT_VERSION: "2.43.0"
-  GIT_DOWNLOAD: "https://github.com/git-for-windows/git/releases/download/"
+  GIT_DOWNLOAD: "https://github.com/git-for-windows/git/releases/download"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -150,7 +150,7 @@ jobs:
       - name: Install step
         if: ${{ steps.cache-step.outputs.cache-hit != 'true' }}
         run: |
-          $URL = ${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip
+          $URL = "${{ env.SMALLSTEP_DOWNLOAD }}/v${{ env.SMALLSTEP_VERSION }}/step_windows_${{ env.SMALLSTEP_VERSION }}_amd64.zip"
           Write-Output $URL
           Invoke-WebRequest -URI $URL -OutFile step.zip
           Expand-Archive -LiteralPath .\step.zip -DestinationPath .
@@ -180,7 +180,7 @@ jobs:
         if: ${{ steps.cache-git.outputs.cache-hit != 'true' }}
         run: |
           choco install --no-progress 7zip
-          $URL = ${{ env.GIT_DOWNLOAD }}/v${{ env.GIT_VERSION }}.windows.1/PortableGit-${{ env.GIT_VERSION }}-64-bit.7z.exe
+          $URL = "${{ env.GIT_DOWNLOAD }}/v${{ env.GIT_VERSION }}.windows.1/PortableGit-${{ env.GIT_VERSION }}-64-bit.7z.exe"
           Write-Output $URL
           Invoke-WebRequest -URI $URL -OutFile git.7zip
           7z.exe x -ogit git.7zip
