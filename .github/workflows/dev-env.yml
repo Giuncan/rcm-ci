@@ -16,6 +16,7 @@ on:
 env:
   PYTHON_VERSION: "3.10.11"
   TURBOVNC_VERSION: "3.1"
+  TURBOVNC_DOWNLOAD: https://github.com/TurboVNC/turbovnc/releases/download
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -102,7 +103,7 @@ jobs:
       - name: Install externals WINDOWS
         run: |        
          # Download exe
-         curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/${{ env.TURBOVNC_VERSION }}/TurboVNC-${{ env.TURBOVNC_VERSION }}-x64.exe
+         curl -o turbovnc.exe $env:TURBOVNC_DOWNLOAD/$env:TURBOVNC_VERSION/TurboVNC-$env:TURBOVNC_VERSION-x64.exe
          
          # Extract file from exe
          choco install --no-progress innoextract
