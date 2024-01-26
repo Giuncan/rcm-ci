@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: dev-env
+name: container-ssh
 
 # Controls when the workflow will run
 on:
@@ -28,11 +28,13 @@ jobs:
       # - name: Checkout 
       #   uses: actions/checkout@v4.1.1
 
-      - uses: addnab/docker-run-action@v3
-        with:
-            registry: gcr.io
-            image: lscr.io/linuxserver/openssh-server:latest
-            
-            # options: -v ${{ github.workspace }}:/work -e ABC=123
+      # - uses: addnab/docker-run-action@v3
+      #   with:
+      #       registry: gcr.io
+      #       image: lscr.io/linuxserver/openssh-server:latest
 
+      #       # options: -v ${{ github.workspace }}:/work -e ABC=123
 
+     - uses: cyrusroshan/generic-docker-run@main
+       with:
+        command: "docker run -d --rm -p 8080:8085 --name pubsub-test --init gcr.io/google.com/cloudsdktool/cloud-sdk:emulators gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
