@@ -28,7 +28,7 @@ jobs:
       # - name: Checkout 
       #   uses: actions/checkout@v4.1.1
     - name: Test_Run
-      uses: philips-software/run-windows-docker-container-action@<version>
+      uses: philips-software/run-windows-docker-container-action@v1.1.0
       with:
         image: mcr.microsoft.com/windows/servercore:20H2
         entrypoint: powershell.exe
