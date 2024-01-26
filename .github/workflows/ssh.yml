@@ -27,7 +27,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       # - name: Checkout 
       #   uses: actions/checkout@v4.1.1
+    - name: Test_Run
+      uses: philips-software/run-windows-docker-container-action@<version>
+      with:
+        image: mcr.microsoft.com/windows/servercore:20H2
+        entrypoint: powershell.exe
+        run: |
+          echo "Hello world";
+          ./run-test-script.ps1;
 
-      - uses: cyrusroshan/generic-docker-run@main
-        with:
-          command: "docker run -d --rm -p 8080:8085 --name pubsub-test --init gcr.io/google.com/cloudsdktool/cloud-sdk:emulators gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
+    - uses: cyrusroshan/generic-docker-run@main
+      with:
+        command: "docker run -d -rm -p 8080:8085 --name pubsub-test --init gcr.io/google.com/cloudsdktool/cloud-sdk:emulators gcloud beta emulators pubsub start --host-port=0.0.0.0:8085"
