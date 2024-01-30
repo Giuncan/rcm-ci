@@ -31,7 +31,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install paramiko==3.0
+        pip install paramiko==3.4
 
     - name: Docker build
       run: docker build -t sshserver . 
