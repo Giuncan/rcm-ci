@@ -32,6 +32,7 @@ jobs:
     - name: Docker run
       run: |
         docker run -dit -p 3000:22 --name sshserver sshserver:latest &
+        sleep 10
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
         pkill docker
