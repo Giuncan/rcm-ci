@@ -24,8 +24,14 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v2
 
-    - name: Docker version
-      run: docker --version
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        pip install paramiko==3.0
 
     - name: Docker build
       run: docker build -t sshserver . 
@@ -33,16 +39,23 @@ jobs:
     - name: Docker run
       run: |
         nohup docker run -dit -p 3000:22 --name sshserver sshserver:latest > nohup.out 2> nohup.err < /dev/null &
+        sleep 2
 
     - name: sshpass
       run: |
         sudo apt-get install sshpass
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
+    
+    - name: paramiko
+      run: |
+        python test_paramiko.py localhost sshuser 3000 password True
       
     - name: Docker kill
       run: |
         docker kill sshserver
+
+
         # python RCM/tests/test_paramiko.py localhost sshserver 3000 password True
         # ssh-keygen -t ecdsa -b 256 -f /tmp/sshkey -q -N ""
         # sshpass -p 'password' ssh-copy-id -i /tmp/sshkey -p 3000 sshuser@localhost
