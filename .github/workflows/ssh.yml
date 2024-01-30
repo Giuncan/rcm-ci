@@ -27,22 +27,58 @@ jobs:
       run: docker --version
     - name: Docker build
       run: docker build -t sshserver .
-    - name: Upload image
-      uses: ishworkh/container-image-artifact-upload@v1.0.0
+    - name: Docker run
+      uses: JarvusInnovations/background-action@v1
       with:
-        image: "sshserver:latest"
+        run: |
+          docker run -dit -p 3000:22 --name prova prova:latest
+        # your step-level and job-level environment variables are available to your commands as-is
+        # npm install will count towards the wait-for timeout
+        # whenever possible, move unrelated scripts to a different step
+        # to background multiple processes: add & to the end of the command
 
-  compile-win:
-    name: Compile site assets
-    runs-on: windows-latest
-    steps:
-    - name: Checkout the repo
-      uses: actions/checkout@v2
-    - name: Docker version
-      run: docker --version
-    - name: Docker build
-      run: docker build -t sshserver .
-    - name: Upload image
-      uses: ishworkh/container-image-artifact-upload@v1.0.0
-      with:
-        image: "sshserver:latest"
+        wait-on: |
+          http://localhost:3000
+
+        # IMPORTANT: to use environment variables in wait-on, you must use this form: ${{ env.VAR }}
+        # See wait-on section below for all resource types and prefixes
+
+        tail: true # true = stderr,stdout
+        # This will allow you to monitor the progress live
+
+        log-output-resume: stderr
+        # Eliminates previosuly output stderr log entries from post-run output
+
+        wait-for: 1m
+
+        log-output: stderr,stdout # same as true
+
+        log-output-if: failure
+        # failure = exit-early or timeout
+
+        working-directory: backend
+        # sets the working directory (cwd) for the shell running commands    
+    - name: test
+      run: |
+        echo ciao
+                
+
+    # - name: Upload image
+    #   uses: ishworkh/container-image-artifact-upload@v1.0.0
+    #   with:
+    #     image: "sshserver:latest"
+
+  # compile-win:
+  #   name: Compile site assets
+  #   runs-on: windows-latest
+  #   steps:
+  #   - name: Checkout the repo
+  #     uses: actions/checkout@v2
+  #   - name: Docker version
+  #     run: docker --version
+  #   - name: Docker build
+  #     run: docker build -t sshserver .
+  #   - name: Upload image
+  #     uses: ishworkh/container-image-artifact-upload@v1.0.0
+  #     with:
+  #       image: "sshserver:latest"
