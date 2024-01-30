@@ -40,23 +40,28 @@ jobs:
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
 
-
     # - name: Upload image
     #   uses: ishworkh/container-image-artifact-upload@v1.0.0
     #   with:
     #     image: "sshserver:latest"
 
-  # compile-win:
-  #   name: Compile site assets
-  #   runs-on: windows-latest
-  #   steps:
-  #   - name: Checkout the repo
-  #     uses: actions/checkout@v2
-  #   - name: Docker version
-  #     run: docker --version
-  #   - name: Docker build
-  #     run: docker build -t sshserver .
-  #   - name: Upload image
-  #     uses: ishworkh/container-image-artifact-upload@v1.0.0
-  #     with:
-  #       image: "sshserver:latest"
+  compile-win:
+    name: Compile site assets
+    runs-on: windows-latest
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v2
+    - name: Test
+      uses: cross-platform-actions/action@v0.22.0
+      with:
+        operating_system: ubuntu
+        version: 'latest'
+        run: |
+          docker build -t sshserver . 
+          nohup timeout 120 docker run -dit -p 3000:22 --name sshserver sshserver:latest > nohup.out 2> nohup.err < /dev/null &
+
+    - name: sshpass
+      run: |
+        choco install sshpass
+        sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
+        echo $?
