@@ -28,7 +28,7 @@ jobs:
     - name: Docker build
       run: docker build -t sshserver .
     - name: sshpass
-      run: apt-get install sshpass
+      run: sudo apt-get install sshpass
     # - name: Docker run
       # run: |
         # docker run -dit -p 3000:22 --name prova prova:latest &
