@@ -31,7 +31,7 @@ jobs:
       run: sudo apt-get install sshpass
     - name: Docker run
       run: |
-        docker run -dit -p 3000:22 --name prova prova:latest &
+        docker run -dit -p 3000:22 --name sshserver sshserver:latest &
         sshpass -p password ssh sshuser@localhost:3000 "exit"
         echo $?
         pkill docker
