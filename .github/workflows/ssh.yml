@@ -31,12 +31,8 @@ jobs:
       run: docker build -t sshserver . 
 
     - name: Docker run
-      uses: JarvusInnovations/background-action@v1
-      with:
-        run: |
-          docker run -dit -p 3000:22 --name sshserver sshserver:latest &
-        wait-on: |
-          http://localhost:3000
+      run: |
+        nohup timeout 120 docker run -dit -p 3000:22 --name sshserver sshserver:latest > nohup.out 2> nohup.err < /dev/null &
 
     - name: sshpass
       run: |
@@ -44,23 +40,6 @@ jobs:
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
 
-    # - name: Docker run
-    #   uses: JarvusInnovations/background-action@v1
-    #   with:
-    #     run: |
-    #       docker run -dit -p 3000:22 --name prova prova:latest
-    #     wait-on: |
-    #       http://localhost:3000
-    #     # tail: true
-    #     # log-output-resume: stderr
-    #     wait-for: 1m
-    #     # log-output: stderr,stdout
-    #     # log-output-if: failure
-    #     # working-directory: backend
-    - name: test
-      run: |
-        echo ciao
-                
 
     # - name: Upload image
     #   uses: ishworkh/container-image-artifact-upload@v1.0.0
