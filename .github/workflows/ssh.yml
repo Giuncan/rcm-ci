@@ -29,11 +29,12 @@ jobs:
       run: docker build -t sshserver .
     - name: sshpass
       run: sudo apt-get install sshpass
-    # - name: Docker run
-      # run: |
-        # docker run -dit -p 3000:22 --name prova prova:latest &
-        # ssh 
-        # http://localhost:3000
+    - name: Docker run
+      run: |
+        docker run -dit -p 3000:22 --name prova prova:latest &
+        sshpass -p password ssh sshuser@localhost:3000 "exit"
+        echo $?
+        pkill docker
 
     # - name: Docker run
     #   uses: JarvusInnovations/background-action@v1
