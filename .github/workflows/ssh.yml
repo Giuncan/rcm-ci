@@ -41,30 +41,28 @@ jobs:
         nohup docker run -dit -p 3000:22 --name sshserver sshserver:latest > nohup.out 2> nohup.err < /dev/null &
         sleep 2
 
-    - name: sshpass
+    - name: Test ssh with password
       run: |
         sudo apt-get install sshpass
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
-    
-    - name: paramiko
-      run: |
         python test_paramiko.py localhost sshuser 3000 password True
-      
+
+    - name: Setup key and copy to server
+      run: |
+        ssh-keygen -t ecdsa -b 256 -f /tmp/sshkey -q -N ""
+        sshpass -p 'password' ssh-copy-id -i /tmp/sshkey -p 3000 sshuser@localhost
+        
+    - name: Setup key and ssh-agent
+      run: |
+        eval $(ssh-agent)
+        ssh-add /tmp/sshkey
+        ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
+        python test_paramiko.py localhost sshuser 3000 None True
+
     - name: Docker kill
       run: |
         docker kill sshserver
-
-
-        # python RCM/tests/test_paramiko.py localhost sshserver 3000 password True
-        # ssh-keygen -t ecdsa -b 256 -f /tmp/sshkey -q -N ""
-        # sshpass -p 'password' ssh-copy-id -i /tmp/sshkey -p 3000 sshuser@localhost
-        # eval $(ssh-agent)
-        # ssh-add /tmp/sshkey
-        # ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
-        # python RCM/tests/test_paramiko.py localhost sshserver 3000 None True
-        
-
 
     # - name: Upload image
     #   uses: ishworkh/container-image-artifact-upload@v1.0.0
