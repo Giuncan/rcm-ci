@@ -23,19 +23,24 @@ jobs:
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
+
     - name: Docker version
       run: docker --version
+
     - name: Docker build
-      run: docker build -t sshserver .
-    - name: sshpass
-      run: sudo apt-get install sshpass
+      run: docker build -t sshserver . 
+
     - name: Docker run
+      uses: JarvusInnovations/background-action@v1
+      with:
+        run: |
+          docker run -dit -p 3000:22 --name sshserver sshserver:latest &
+
+    - name: sshpass
       run: |
-        docker run -dit -p 3000:22 --name sshserver sshserver:latest &
-        sleep 10
+        sudo apt-get install sshpass
         sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
         echo $?
-        pkill docker
 
     # - name: Docker run
     #   uses: JarvusInnovations/background-action@v1
