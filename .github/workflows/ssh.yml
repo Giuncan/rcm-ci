@@ -35,6 +35,8 @@ jobs:
       with:
         run: |
           docker run -dit -p 3000:22 --name sshserver sshserver:latest &
+        wait-on: |
+          http://localhost:3000
 
     - name: sshpass
       run: |
