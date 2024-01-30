@@ -27,19 +27,27 @@ jobs:
       run: docker --version
     - name: Docker build
       run: docker build -t sshserver .
-    - name: Docker run
-      uses: JarvusInnovations/background-action@v1
-      with:
-        run: |
-          docker run -dit -p 3000:22 --name prova prova:latest
-        wait-on: |
-          http://localhost:3000
-        # tail: true
-        # log-output-resume: stderr
-        wait-for: 1m
-        # log-output: stderr,stdout
-        # log-output-if: failure
-        # working-directory: backend
+    - name: sshpass
+      run: apt-get install sshpass
+    # - name: Docker run
+      # run: |
+        # docker run -dit -p 3000:22 --name prova prova:latest &
+        # ssh 
+        # http://localhost:3000
+
+    # - name: Docker run
+    #   uses: JarvusInnovations/background-action@v1
+    #   with:
+    #     run: |
+    #       docker run -dit -p 3000:22 --name prova prova:latest
+    #     wait-on: |
+    #       http://localhost:3000
+    #     # tail: true
+    #     # log-output-resume: stderr
+    #     wait-for: 1m
+    #     # log-output: stderr,stdout
+    #     # log-output-if: failure
+    #     # working-directory: backend
     - name: test
       run: |
         echo ciao
