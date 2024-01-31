@@ -1,0 +1,109 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ssh
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# env:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  compile:
+    name: Compile site assets
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v4.1.1
+
+    # - name: Set up Python
+    #   uses: actions/setup-python@v5.0.0
+    #   with:
+    #     python-version: "3.10"
+
+    # - name: Install dependencies
+    #   run: |
+    #     pip install paramiko==3.4
+
+    - name: Checkout step-ssh-example repo
+      uses: actions/checkout@v4.1.1
+      with:
+        path: step
+
+    - name: Install smallstep
+      run: |
+        wget https://dl.smallstep.com/cli/docs-cli-install/latest/step-cli_amd64.deb
+        wget https://dl.smallstep.com/certificates/docs-ca-install/latest/step-ca_amd64.deb
+        sudo dpkg -i step-cli_amd64.deb
+        sudo dpkg -i step-ca_amd64.deb
+        which step
+        which step-ca
+
+    - name: Cache Vagrant boxes
+      uses: actions/cache@v2
+      with:
+        path: ~/.vagrant.d/boxes
+        key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+        restore-keys: |
+          ${{ runner.os }}-vagrant-
+
+    - name: Show Vagrant version
+      run: vagrant --version
+
+    - name: Run vagrant up
+      run: |
+        cd step 
+        vagrant up
+
+    # - name: Test ssh with password
+    #   run: |
+    #     sudo apt-get install sshpass
+    #     sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
+    #     echo $?
+    #     # python test_paramiko.py localhost sshuser 3000 password True
+
+    # - name: Setup key and copy to server
+    #   run: |
+    #     ssh-keygen -t ecdsa -b 256 -f /tmp/sshkey -q -N ""
+    #     sshpass -p 'password' ssh-copy-id -i /tmp/sshkey -p 3000 sshuser@localhost
+        
+    # - name: Setup key and ssh-agent
+    #   run: |
+    #     eval $(ssh-agent)
+    #     ssh-add /tmp/sshkey
+    #     ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
+    #     # python test_paramiko.py localhost sshuser 3000 None True
+
+    # - name: Docker kill
+    #   run: |
+    #     docker kill sshserver
+
+    # https://github.com/jonashackt/vagrant-github-actions
+
+    # - name: Upload image
+    #   uses: ishworkh/container-image-artifact-upload@v1.0.0
+    #   with:
+    #     image: "sshserver:latest"
+
+  # compile-win:
+  #   name: Compile site assets
+  #   runs-on: windows-latest
+  #   steps:
+  #   - name: Checkout the repo
+  #     uses: actions/checkout@v2
+  #   - name: Checkout the repo
+  #     uses: actions/checkout@v2
+
+    # - name: sshpass
+    #   run: |
+    #     choco install sshpass
+    #     sshpass -p 'password' ssh -o StrictHostKeyChecking=no -p 3000 sshuser@localhost 'exit'
+    #     echo $?
