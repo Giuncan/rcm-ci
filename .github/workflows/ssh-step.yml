@@ -37,7 +37,7 @@ jobs:
       uses: actions/checkout@v4.1.1
       with:
         path: step
-        repository: https://github.com/smallstep/step-ssh-example.git
+        repository: smallstep/step-ssh-example
 
     - name: Install smallstep
       run: |
