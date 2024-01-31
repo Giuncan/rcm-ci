@@ -46,6 +46,9 @@ jobs:
         sudo dpkg -i step-ca_amd64.deb
         which step
         which step-ca
+        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install vagrant
 
     - name: Cache Vagrant boxes
       uses: actions/cache@v2
