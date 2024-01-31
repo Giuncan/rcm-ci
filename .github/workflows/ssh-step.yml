@@ -55,6 +55,7 @@ jobs:
         sudo apt update
         sudo apt search virtualbox
         sudo apt install vagrant virtualbox
+    
 
 
     - name: Cache Vagrant boxes
@@ -71,6 +72,7 @@ jobs:
     - name: Run vagrant up
       run: |
         cd step 
+        echo -e '* 10.0.0.0/8 192.168.0.0/16\n* 2001::/64\n' > /etc/vbox/networks.conf
         vagrant up --provider=virtualbox
 
     # - name: Test ssh with password
