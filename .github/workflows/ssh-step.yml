@@ -47,16 +47,17 @@ jobs:
         sudo dpkg -i step-ca_amd64.deb
         which step
         which step-ca
-        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-        wget -qO - https://www.virtualbox.org/download/oracle_vbox_2016.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/oracle-virtualbox-2016.gpg -
-        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian jammy contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
-        sudo apt update
-        sudo apt search virtualbox
-        sudo apt install vagrant virtualbox
-    
+    - name: Install vagrant
+      run: |
+        # wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        # echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
+        # wget -qO - https://www.virtualbox.org/download/oracle_vbox_2016.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/oracle-virtualbox-2016.gpg -
+        # echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian jammy contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+        # sudo apt update
+        # sudo apt search virtualbox
+        # sudo apt install vagrant virtualbox
 
     - name: Cache Vagrant boxes
       uses: actions/cache@v2
@@ -66,15 +67,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-vagrant-
 
-    - name: Show Vagrant version
-      run: vagrant --version
+    # - name: Show Vagrant version
+    #   run: vagrant --version
 
-    - name: Run vagrant up
-      run: |
-        cd step
-        sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
-        vagrant up --provider=virtualbox
-        vagrant ssh-config
+    # - name: Run vagrant up
+    #   run: |
+    #     cd step
+    #     sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
+    #     vagrant up --provider=virtualbox
+    #     vagrant ssh-config
         
     - name: Setup client
       run: |
@@ -104,6 +105,10 @@ jobs:
       run: |
         cd step
         export STEPPATH="$PWD/step"
+        sleep 10
+        cat nohup*
+        echo jobs
+        jobs
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
         ssh-add -l
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
