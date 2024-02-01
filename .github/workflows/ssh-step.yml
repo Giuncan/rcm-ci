@@ -88,23 +88,13 @@ jobs:
     - uses: JarvusInnovations/background-action@v1
       name: Bootstrap System Under Test (SUT)
       with:
-        run: |
-          export STEPPATH="$PWD/step"
-          step-ca step/config/ca.json
-
-        wait-on: |
-          http://localhost:443
-
-        tail: true # true = stderr,stdout
-
+        run: STEPPATH="$PWD/step" step-ca step/config/ca.json
+        wait-on: https://localhost:443
+        tail: true
         log-output-resume: stderr
-
         wait-for: 5m
-
-        log-output: stderr,stdout # same as true
-
+        log-output: stderr,stdout
         log-output-if: failure
-
         working-directory: step
 
 
