@@ -75,6 +75,7 @@ jobs:
         sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
         vagrant up --provider=virtualbox
         vagrant ssh-config
+        mkdir -p ~/.ssh
         echo "@cert-authority * ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJJM+jkIdieQvdPb8DwnfnJudEc9PgVBqLDWHKgvqoIiMXhuIyGstQ9ULOBMdJkqxMjkRTFZp1iFvIk+iU6hwTA=" >> ~/.ssh/known_hosts
         export STEPPATH="$PWD/step"
         step-ca step/config/ca.json &
