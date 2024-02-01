@@ -75,14 +75,20 @@ jobs:
         sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
         vagrant up --provider=virtualbox
         vagrant ssh-config
+        
+    - name: Setup client
+      run: |
         mkdir -p ~/.ssh
         echo "@cert-authority * ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJJM+jkIdieQvdPb8DwnfnJudEc9PgVBqLDWHKgvqoIiMXhuIyGstQ9ULOBMdJkqxMjkRTFZp1iFvIk+iU6hwTA=" >> ~/.ssh/known_hosts
+    - name: Startup step ca
+      run: |
+        cd step
         export STEPPATH="$PWD/step"
-        step-ca step/config/ca.json &
+        nohup step-ca step/config/ca.json > nohup.out 2> nohup.err < /dev/null &
+        sleep 10
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
         ssh-add -l
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
-        
 
     # - name: Test ssh with password
     #   run: |
