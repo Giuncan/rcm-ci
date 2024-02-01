@@ -72,8 +72,7 @@ jobs:
     - name: Run vagrant up
       run: |
         cd step
-        sudo mkdir -p /etc/vbox/
-        sudo echo -e '* 10.0.0.0/8 192.168.0.0/16\n* 2001::/64\n' > /etc/vbox/networks.conf
+        sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
         vagrant up --provider=virtualbox
 
     # - name: Test ssh with password
