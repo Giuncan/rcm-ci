@@ -83,19 +83,21 @@ jobs:
 
     - name: Startup step ca
       run: |
+        cd step
+        export STEPPATH="$PWD/step"
+        nohup step-ca step/config/ca.json > nohup.out 2> nohup.err < /dev/null &
 
-
-    - uses: JarvusInnovations/background-action@v1
-      name: Bootstrap System Under Test (SUT)
-      with:
-        run: STEPPATH="$PWD/step" step-ca step/config/ca.json
-        wait-on: https://localhost:443
-        tail: true
-        log-output-resume: stderr
-        wait-for: 5m
-        log-output: stderr,stdout
-        log-output-if: failure
-        working-directory: step
+    # - uses: JarvusInnovations/background-action@v1
+    #   name: Startup step ca
+    #   with:
+    #     run: STEPPATH="$PWD/step" step-ca step/config/ca.json
+    #     wait-on: https://localhost:443
+    #     tail: true
+    #     log-output-resume: stderr
+    #     wait-for: 5m
+    #     log-output: stderr,stdout
+    #     log-output-if: failure
+    #     working-directory: step
 
 
     - name: Get step certificate
