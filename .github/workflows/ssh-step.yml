@@ -80,10 +80,6 @@ jobs:
         sed -i 's/443/1234/' step/config/ca.json 
         nohup step-ca step/config/ca.json --password-file ./password.txt --insecure > nohup.out 2> nohup.err < /dev/null &
         eval $(ssh-agent)
-        sleep 2
-        cat nohup*
-        step ssh certificate testuser testuser_ecdsa --ca-url https://localhost:1234 --root step/certs/root_ca.crt --password-file password.txt -f
-        ssh-add -l
 
         # sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
         sed -i 's/ip: "192.168.0.101"/ip: "192.168.56.10"/' Vagrantfile
@@ -91,7 +87,10 @@ jobs:
         vagrant up --provider=virtualbox
         vagrant ssh-config
         ping -c1 192.168.56.10
-        ssh testuser@192.168.56.10 "echo 'I\'m in'"
+        step ssh certificate testuser testuser_ecdsa --ca-url https://localhost:1234 --root step/certs/root_ca.crt --password-file password.txt -f
+        ssh-add -l
+        step ssh list --raw
+        ssh testuser@192.168.56.10 "echo 'I\'m in'" || cat nohup*
 
 
     # - name: Test ssh with password
