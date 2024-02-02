@@ -41,6 +41,11 @@ jobs:
 
     - name: Install smallstep
       run: |
+        sudo cat /etc/vbox/networks.conf
+        exit
+
+    - name: Install smallstep
+      run: |
         wget https://dl.smallstep.com/cli/docs-cli-install/latest/step-cli_amd64.deb
         wget https://dl.smallstep.com/certificates/docs-ca-install/latest/step-ca_amd64.deb
         sudo dpkg -i step-cli_amd64.deb
