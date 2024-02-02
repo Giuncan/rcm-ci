@@ -96,7 +96,7 @@ jobs:
         run: |
           echo password > password.txt
           export STEPPATH="$PWD/step"
-          step-ca step/config/ca.json --password-file ./password.txt
+          step-ca step/config/ca.json --password-file ./password.txt &
         wait-on: https://localhost:443
         tail: true
         log-output-resume: stderr
