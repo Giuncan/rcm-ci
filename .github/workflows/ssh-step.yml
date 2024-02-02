@@ -41,7 +41,8 @@ jobs:
 
     - name: Install smallstep
       run: |
-        sudo cat /etc/vbox/networks.conf
+        ls -ltr /etc/
+        ls -ltr /etc/vbox
         exit
 
     - name: Install smallstep
