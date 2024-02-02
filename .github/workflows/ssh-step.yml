@@ -67,15 +67,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-vagrant-
 
-    - name: Show Vagrant version
-      run: vagrant --version
-
-    - name: Run vagrant up
-      run: |
-        cd step
-        sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
-        vagrant up --provider=virtualbox
-        
     - name: Setup client
       run: |
         mkdir -p ~/.ssh
@@ -94,8 +85,14 @@ jobs:
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost:1234 --root step/certs/root_ca.crt --password-file password.txt -f
         ssh-add -l
 
-    - name: Get step certificate
+    - name: Show Vagrant version
+      run: vagrant --version
+
+    - name: Run vagrant up
       run: |
+        cd step
+        sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
+        vagrant up --provider=virtualbox
         vagrant ssh-config
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
 
