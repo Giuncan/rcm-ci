@@ -85,10 +85,11 @@ jobs:
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost:1234 --root step/certs/root_ca.crt --password-file password.txt -f
         ssh-add -l
 
-        sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
+        # sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
+        # sed -i 's/ip: "192.168.0.101"/ip: "192.168.0.101"/' Vagrantfile
         vagrant up --provider=virtualbox
         vagrant ssh-config
-        ssh -p 2222 testuser@127.0.0.1 "echo 'I\'m in'"
+        ssh -p 2222 testuser@localhost "echo 'I\'m in'"
 
 
     # - name: Test ssh with password
