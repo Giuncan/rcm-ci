@@ -90,7 +90,7 @@ jobs:
         vagrant up --provider=virtualbox
         vagrant ssh-config
         ping -c1 192.168.56.10
-        ssh -p 2222 testuser@localhost "echo 'I\'m in'"
+        ssh testuser@192.168.56.10 "echo 'I\'m in'"
 
 
     # - name: Test ssh with password
