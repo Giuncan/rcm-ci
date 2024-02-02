@@ -5,8 +5,8 @@ name: ssh
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   # pull_request:
   #   branches: [ "main" ]
 
@@ -47,7 +47,6 @@ jobs:
         sudo dpkg -i step-ca_amd64.deb
         which step
         which step-ca
-        sudo apt install expect
 
     - name: Install vagrant
       run: |
@@ -88,7 +87,8 @@ jobs:
         cd step
         export STEPPATH="$PWD/step"
         echo password > password.txt
-        nohup step-ca step/config/ca.json --password-file ./password.txt > nohup.out 2> nohup.err < /dev/null &
+        sed -i 's/443/1234/' step/config/ca.json 
+        nohup step-ca step/config/ca.json --password-file ./password.txt --insecure > nohup.out 2> nohup.err < /dev/null &
         sleep 10
         cat nohup*
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
