@@ -89,6 +89,9 @@ jobs:
         export STEPPATH="$PWD/step"
         echo password > password.txt
         nohup step-ca step/config/ca.json --password-file ./password.txt > nohup.out 2> nohup.err < /dev/null &
+        sleep 10
+        cat nohup*
+        step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
 
     # - uses: JarvusInnovations/background-action@v1
     #   name: Startup step ca
@@ -108,10 +111,11 @@ jobs:
 
     - name: Get step certificate
       run: |
-        cd step
-        export STEPPATH="$PWD/step"
-        sleep 10
-        step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
+        # cd step
+        # export STEPPATH="$PWD/step"
+        # sleep 10
+        # cat nohup*
+        # step ssh certificate testuser testuser_ecdsa --ca-url https://localhost --root step/certs/root_ca.crt
         ssh-add -l
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
 
