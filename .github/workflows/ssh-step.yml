@@ -89,6 +89,7 @@ jobs:
         sed -i 's/ip: "192.168.0.101"/ip: "192.168.56.10"/' Vagrantfile
         vagrant up --provider=virtualbox
         vagrant ssh-config
+        ping -c1 192.168.56.10
         ssh -p 2222 testuser@localhost "echo 'I\'m in'"
 
 
