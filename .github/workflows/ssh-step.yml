@@ -89,13 +89,14 @@ jobs:
         echo password > password.txt
         sed -i 's/443/1234/' step/config/ca.json 
         nohup step-ca step/config/ca.json --password-file ./password.txt --insecure > nohup.out 2> nohup.err < /dev/null &
-        sleep 10
+        eval $(ssh-agent)
+        sleep 2
         cat nohup*
         step ssh certificate testuser testuser_ecdsa --ca-url https://localhost:1234 --root step/certs/root_ca.crt --password-file password.txt -f
+        ssh-add -l
 
     - name: Get step certificate
       run: |
-        ssh-add -l
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
 
 
