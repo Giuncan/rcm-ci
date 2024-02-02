@@ -41,12 +41,6 @@ jobs:
 
     - name: Install smallstep
       run: |
-        ls -ltr /etc/
-        ls -ltr /etc/vbox
-        exit
-
-    - name: Install smallstep
-      run: |
         wget https://dl.smallstep.com/cli/docs-cli-install/latest/step-cli_amd64.deb
         wget https://dl.smallstep.com/certificates/docs-ca-install/latest/step-ca_amd64.deb
         sudo dpkg -i step-cli_amd64.deb
@@ -92,7 +86,7 @@ jobs:
         ssh-add -l
 
         # sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
-        # sed -i 's/ip: "192.168.0.101"/ip: "192.168.0.101"/' Vagrantfile
+        sed -i 's/ip: "192.168.0.101"/ip: "192.168.56.10"/' Vagrantfile
         vagrant up --provider=virtualbox
         vagrant ssh-config
         ssh -p 2222 testuser@localhost "echo 'I\'m in'"
