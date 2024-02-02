@@ -75,7 +75,6 @@ jobs:
         cd step
         sed -i 's/ip: "192.168.0.101"/type: "dhcp"/' Vagrantfile
         vagrant up --provider=virtualbox
-        vagrant ssh-config
         
     - name: Setup client
       run: |
@@ -97,6 +96,7 @@ jobs:
 
     - name: Get step certificate
       run: |
+        vagrant ssh-config
         ssh -p 2222 testhost@127.0.0.1 "echo 'I\'m in'"
 
 
