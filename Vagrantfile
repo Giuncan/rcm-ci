@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
             echo "@cert-authority * $(cat /root/.step/certs/ssh_host_ca_key.pub | tr -d '\n')"
             
             # STEP CA SYSTEMCTL
-            mkdir -p /root/.scripts
+            mkdir -p /root/.scripts /root/logs
             echo "#!/usr/bin/env bash\nstep-ca /root/.step/config/ca.json --password-file password.txt 1>> /root/logs/step-ca.out 2>> /root/logs/step-ca.err\n" > /root/.scripts/step-ca.sh
             echo "[Unit]\nDescription=Start step ca\nAfter=multi-user.target\n\n[Service]\nExecStart=/usr/bin/env bash /root/.scripts/step-ca.sh\nType=simple\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/step-ca.service
             sudo systemctl daemon-reload
