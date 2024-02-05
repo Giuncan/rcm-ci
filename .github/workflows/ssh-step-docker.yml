@@ -55,7 +55,6 @@ jobs:
 
     - name: Startup step ca
       run: |
-        exit
         docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err &
         sleep 10
         echo password > password.txt
@@ -65,11 +64,11 @@ jobs:
         # ping -c1 stepca
         # echo -e '\x1dclose\x0d' | telnet stepca 22
         # echo -e '\x1dclose\x0d' | telnet stepca 8443
-        ls -ltr build.log
-        cat build.log
-        grep "Root fingerprint: " build.log || exit 1
-        echo step ca bootstrap --fingerprint $(grep "Root fingerprint: " build.log | awk '{print $NF}') --ca-url=https://stepca:8443 
-        step ca bootstrap --fingerprint --ca-url=https://stepca:8443 $(grep "Root fingerprint: " build.log | awk '{print $NF}')        step ssh login testuser --provisioner step-ca@example.com --password-file password.txt 
+        FINGERPRINT=$(grep "Root fingerprint" build.log)
+        echo "${FINGERPRINT:?}"
+        echo step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443 
+        step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
+        step ssh login testuser --provisioner step-ca@example.com --password-file password.txt 
         ssh testuser@192.168.56.10 "echo 'I\'m in'"
 
 
