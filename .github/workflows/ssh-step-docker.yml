@@ -44,15 +44,14 @@ jobs:
     #     mkdir -p ~/.ssh
     #     echo "@cert-authority * ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJJM+jkIdieQvdPb8DwnfnJudEc9PgVBqLDWHKgvqoIiMXhuIyGstQ9ULOBMdJkqxMjkRTFZp1iFvIk+iU6hwTA=" >> ~/.ssh/known_hosts
 
-    - name: Build Docker
+    # - name: Build Docker
+    #   run: |
+      
+    - name: Startup step ca
       run: |
         docker build -t step-ca --no-cache --progress=plain . 2>&1 | tee build.log
         docker network create --subnet=172.18.0.0/16 mynet123
-
-    - name: Startup step ca
-      run: |
-        docker run --entrypoint /bin/bash step-ca 'find /root/.step -type f'
-        #'step certificate fingerprint $(step path)/certs/root_ca.crt'
+        docker run --entrypoint /bin/bash step-ca 'step certificate fingerprint /root/.step/certs/root_ca.crt'
         exit
         docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err &
         sleep 10
