@@ -61,7 +61,8 @@ jobs:
         sudo echo "172.18.0.22 stepca" | sudo tee -a /etc/hosts
         FINGERPRINT=$(grep "Root fingerprint" build.log | awk '{print $NF}')
         echo "${FINGERPRINT:?}"
-        echo step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
+        mkdir -p ~/.ssh
+        grep cert-authority build.log >> ~/.ssh/known_hosts
         step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
         eval $(ssh-agent)
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
