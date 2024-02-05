@@ -67,6 +67,7 @@ jobs:
         step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
         eval $(ssh-agent)
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
+        ssh-add -l
         ssh testuser@stepca "echo 'I\'m in'"
 
 
