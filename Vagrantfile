@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
             sudo systemctl daemon-reload
             sudo systemctl enable step-ca.service                        
         SHELL
-		host.vm.network "private_network", ip: "192.168.1.51"
+		host.vm.network "private_network", ip: "192.168.56.10"
         # host.vm.synced_folder "keys", "/keys"
     end
 end
