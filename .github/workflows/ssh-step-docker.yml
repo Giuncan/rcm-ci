@@ -13,7 +13,8 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# env:
+env:
+  STEPCA: 172.18.0.22
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -46,11 +47,11 @@ jobs:
     - name: Setup Network
       run: |
         docker network create --subnet=172.18.0.0/16 mynet123
-        sudo echo "172.18.0.22 stepca" | sudo tee -a /etc/hosts
+        sudo echo "$STEPCA stepca" | sudo tee -a /etc/hosts
 
     - name: Startup step ca
       run: |
-        nohup docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err < /dev/null &
+        nohup docker run --hostname testhost --net mynet123 --ip $STEPCA -p 2222:22 step-ca 1> docker.out 2> docker.err < /dev/null &
         sleep 5
 
     - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
