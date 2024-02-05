@@ -51,7 +51,7 @@ jobs:
 
     - name: Startup step ca
       run: |
-        docker list
+        docker ps
         FINGERPRINT=$(docker exec step-ca "step certificate fingerprint $(step path)/certs/root_ca.crt")
         echo $FINGERPRINT
         exit
