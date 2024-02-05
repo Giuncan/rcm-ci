@@ -46,7 +46,12 @@ Vagrant.configure("2") do |config|
             sudo systemctl daemon-reload
             sudo systemctl enable step-ca.service --now
             sudo systemctl status step-ca.service
+            
+            sudo ufw allow 8443
+            sudo ufw status verbose
+            
             cat /root/logs/step-ca.*
+
         SHELL
 		host.vm.network "private_network", ip: "192.168.56.10"
         config.vm.network "forwarded_port", guest: 8443, host: 8443
