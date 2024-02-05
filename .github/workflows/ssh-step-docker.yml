@@ -63,6 +63,7 @@ jobs:
         echo "${FINGERPRINT:?}"
         mkdir -p ~/.ssh
         grep cert-authority build.log >> ~/.ssh/known_hosts
+        cat ~/.ssh/known_hosts
         step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
         eval $(ssh-agent)
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
