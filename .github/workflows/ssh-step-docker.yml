@@ -54,7 +54,7 @@ jobs:
         docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err &
         sleep 10
         echo password > password.txt
-        sudo echo '172.18.0.22 stepca' >> /etc/hosts
+        sudo echo "172.18.0.22 stepca" | sudo tee -a /etc/hosts
         # export HOSTALIASES=~/.hosts
         ping -c1 172.18.0.22
         ping -c1 stepca
