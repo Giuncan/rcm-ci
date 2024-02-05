@@ -43,7 +43,8 @@ Vagrant.configure("2") do |config|
             echo "#!/usr/bin/env bash\nstep-ca /root/.step/config/ca.json --password-file password.txt 1>> /root/logs/step-ca.out 2>> /root/logs/step-ca.err\n" > /root/.scripts/step-ca.sh
             echo "[Unit]\nDescription=Start step ca\nAfter=multi-user.target\n\n[Service]\nExecStart=/usr/bin/bash /root/.scripts/step-ca.sh\nType=simple\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/step-ca.service
             sudo systemctl daemon-reload
-            sudo systemctl enable step-ca.service                        
+            sudo systemctl enable step-ca.service
+            sudo systemctl start step-ca.service
         SHELL
 		host.vm.network "private_network", ip: "192.168.56.10"
         # host.vm.synced_folder "keys", "/keys"
