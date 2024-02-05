@@ -64,7 +64,7 @@ jobs:
         # ping -c1 stepca
         # echo -e '\x1dclose\x0d' | telnet stepca 22
         # echo -e '\x1dclose\x0d' | telnet stepca 8443
-        FINGERPRINT=$(grep "Root fingerprint" build.log)
+        FINGERPRINT=$(grep "Root fingerprint" build.log | awk '{print $NF}')
         echo "${FINGERPRINT:?}"
         echo step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443 
         step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
