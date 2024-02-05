@@ -11,19 +11,19 @@ Vagrant.configure("2") do |config|
             sudo dpkg -i step-ca_amd64.deb
 
             # STEP
-            echo password > password.txt
+            echo password > /root/password.txt
             step ca init --ssh \
                          --deployment-type standalone \
                          --name step-ca-example \
                          --dns stepca \
                          --address :8443 \
                          --provisioner step-ca@example.com \
-                         --password-file password.txt
+                         --password-file /root/password.txt
             step ssh certificate stepca /etc/ssh/ssh_host_ecdsa_key.pub \
                          --offline \
                          --sign \
                          --host \
-                         --password-file password.txt \
+                         --password-file /root/password.txt \
                          --provisioner step-ca@example.com
 
             # CREATE USER
@@ -51,9 +51,6 @@ Vagrant.configure("2") do |config|
             sudo ufw status verbose
             
             cat /root/logs/step-ca.*
-            step path
-            pwd
-            realpath password.txt
         SHELL
         config.vm.provision "shell", run: "always", inline: "systemctl start step-ca.service"
         host.vm.network "private_network", ip: "192.168.56.10"
