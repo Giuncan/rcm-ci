@@ -46,11 +46,14 @@ jobs:
 
     - name: Build Docker
       run: |
-        docker build -t step-ca  --no-cache --progress=plain . 2>&1 | tee build.log
+        docker build -t step-ca --no-cache --progress=plain . 2>&1 | tee build.log
         docker network create --subnet=172.18.0.0/16 mynet123
 
     - name: Startup step ca
       run: |
+        FINGERPRINT=$(docker exec step-ca "step certificate fingerprint $(step path)/certs/root_ca.crt")
+        echo $FINGERPRINT
+        exit
         docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err &
         sleep 10
         echo password > password.txt
