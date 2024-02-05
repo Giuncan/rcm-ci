@@ -51,7 +51,9 @@ Vagrant.configure("2") do |config|
             sudo ufw status verbose
             
             cat /root/logs/step-ca.*
-
+            step path
+            pwd
+            realpath password.txt
         SHELL
         config.vm.provision "shell", run: "always", inline: "systemctl start step-ca.service"
         host.vm.network "private_network", ip: "192.168.56.10"
