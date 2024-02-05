@@ -60,6 +60,8 @@ jobs:
         # ping -c1 stepca
         # echo -e '\x1dclose\x0d' | telnet stepca 22
         # echo -e '\x1dclose\x0d' | telnet stepca 8443
+        ls -ltr build.log
+        cat build.log
         grep "Root fingerprint: " build.log || exit 1
         echo step ca bootstrap --fingerprint $(grep "Root fingerprint: " build.log | awk '{print $NF}') --ca-url=https://stepca:8443 
         step ca bootstrap --fingerprint --ca-url=https://stepca:8443 $(grep "Root fingerprint: " build.log | awk '{print $NF}')        step ssh login testuser --provisioner step-ca@example.com --password-file password.txt 
