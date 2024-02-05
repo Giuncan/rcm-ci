@@ -61,8 +61,11 @@ jobs:
 
     - name: Startup step ca
       run: |
-        vagrant up --provider=virtualbox
+        vagrant up --provider=virtualbox 2>&1 | tee build.log
         vagrant ssh-config
+        ping -c1 192.168.56.10
+        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 22
+        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 8443
 
     # - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
     #   run: |
