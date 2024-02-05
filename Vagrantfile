@@ -49,6 +49,7 @@ Vagrant.configure("2") do |config|
             cat /root/logs/step-ca.*
         SHELL
 		host.vm.network "private_network", ip: "192.168.56.10"
+        config.vm.network "forwarded_port", guest: 8443, host: 8443
         # host.vm.synced_folder "keys", "/keys"
     end
 end
