@@ -51,7 +51,7 @@ jobs:
 
     - name: Startup step ca
       run: |
-        docker run --entrypoint /bin/bash step-ca "step certificate fingerprint /root/.step/certs/root_ca.crt"
+        docker run --entrypoint /bin/bash step-ca 'step certificate fingerprint $(step path)/certs/root_ca.crt'
         exit
         docker run --hostname testhost --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca 1> docker.out 2> docker.err &
         sleep 10
