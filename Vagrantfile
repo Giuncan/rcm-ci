@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
                          --deployment-type standalone \
                          --name step-ca-example \
                          --dns stepca \
-                         --address :443 \
+                         --address :8443 \
                          --provisioner step-ca@example.com \
                          --password-file password.txt
             step ssh certificate stepca /etc/ssh/ssh_host_ecdsa_key.pub \
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
             cat /root/logs/step-ca.*
         SHELL
 		host.vm.network "private_network", ip: "192.168.56.10"
-        # config.vm.network "forwarded_port", guest: 8443, host: 8443
+        config.vm.network "forwarded_port", guest: 8443, host: 8443
         # host.vm.synced_folder "keys", "/keys"
     end
 end

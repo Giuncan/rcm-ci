@@ -65,7 +65,8 @@ jobs:
         vagrant ssh-config
         ping -c1 192.168.56.10
         echo -e '\x1dclose\x0d' | telnet 192.168.56.10 22
-        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 443
+        vagrant ssh -- systemctl status step-ca.service
+        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 8443
 
     # - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
     #   run: |
