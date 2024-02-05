@@ -51,7 +51,7 @@ jobs:
 
     - name: Startup step ca
       run: |
-        docker run --hostname testhost  --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca
+        docker run --hostname testhost  --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca &
         step ca bootstrap --fingerprint $(grep "Root fingerprint: " build.log | awk '{print $NF}') --ca-url=https://stepca:8443
         echo password > password.txt
         echo 'stepca 172.18.0.22' >> /etc/hosts
