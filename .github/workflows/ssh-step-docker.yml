@@ -71,9 +71,9 @@ jobs:
         echo password > password.txt
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
         ssh-add -l
-        ssh testuser@stepca 'echo ciao'
+        ssh testuser@stepca 'echo SSH login successed'
 
-        python RCM/tests/test_paramiko.py stepca testuser 22 None True || echo "failed as expected"
+        python test_paramiko.py stepca testuser 22 None True || echo "failed as expected"
         PARAMIKO_FILE="$(python -c "import paramiko, os; print(os.path.dirname(paramiko.__file__))")/auth_handler.py"
         sed -i'.bak' -e 's/if key.public_blob:/if hasattr(key, "public_blob") and key.public_blob:/' $PARAMIKO_FILE
-        python RCM/tests/test_paramiko.py stepca testuser 22 None True && echo "success as expected"
+        python test_paramiko.py stepca testuser 22 None True && echo "success as expected"
