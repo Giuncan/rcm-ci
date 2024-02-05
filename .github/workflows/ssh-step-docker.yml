@@ -53,8 +53,8 @@ jobs:
       run: |
         docker run --hostname testhost  --net mynet123 --ip 172.18.0.22 -p 2222:22 step-ca &
         echo password > password.txt
-        echo 'stepca 172.18.0.22' >> /etc/hosts
-        # export HOSTALIASES=~/.hosts
+        echo 'stepca 172.18.0.22' >> ~/.hosts
+        export HOSTALIASES=~/.hosts
         step ca bootstrap --fingerprint $(grep "Root fingerprint: " build.log | awk '{print $NF}') --ca-url=https://stepca:8443
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt 
         ssh testuser@192.168.56.10 "echo 'I\'m in'"
