@@ -62,7 +62,7 @@ jobs:
         FINGERPRINT=$(grep "Root fingerprint" build.log | awk '{print $NF}')
         echo "${FINGERPRINT:?}"
         mkdir -p ~/.ssh
-        grep cert-authority build.log >> ~/.ssh/known_hosts
+        grep cert-authority build.log | awk '{print $3, $4, $5, $6}' >> ~/.ssh/known_hosts
         cat ~/.ssh/known_hosts
         step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
         eval $(ssh-agent)
