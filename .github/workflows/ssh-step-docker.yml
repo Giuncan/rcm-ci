@@ -68,7 +68,7 @@ jobs:
         eval $(ssh-agent)
         step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
         ssh-add -l
-        ssh testuser@stepca "echo 'I\'m in'"
+        ssh testuser@stepca 'echo ciao'
 
 
     # - name: Test ssh with password

@@ -38,7 +38,7 @@ RUN adduser --quiet --disabled-password --gecos '' testuser 2>/dev/null && \
     echo 'HostCertificate /etc/ssh/ssh_host_ecdsa_key-cert.pub' >> /etc/ssh/sshd_config
     # echo 'HostKey /keys/ssh_host_ecdsa_key' >> /etc/ssh/sshd_config && \
 RUN echo 'Add following line to your local hosts ~/.ssh/known_hosts file to accept host certs' && \
-    echo "@cert-authority * $(cat /etc/ssh/ssh_host_ecdsa_key.pub | tr -d '\n')"
+    echo "@cert-authority * $(cat /root/.step/certs/ssh_host_ca_key.pub | tr -d '\n')"
 RUN mkdir /var/run/sshd
 RUN echo "[supervisord]\nnodaemon=true\nuser=root\n\n[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n[program:step-ca]\ncommand=step-ca /root/.step/config/ca.json --password-file password.txt\n" > /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/bin/supervisord"]
