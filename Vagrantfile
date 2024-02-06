@@ -2,6 +2,7 @@ Vagrant.configure("2") do |config|
 	config.vm.define "stepca" do |host|
 		host.vm.box = "ubuntu/bionic64"
 		host.vm.hostname = "stepca"
+        config.ssh.insert_key = false
         config.vm.provision "shell", inline: <<-SHELL
             sudo apt-get update
             sudo apt-get install -y wget openssh-server iputils-ping
