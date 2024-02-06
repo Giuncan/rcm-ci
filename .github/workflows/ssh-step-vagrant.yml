@@ -59,7 +59,7 @@ jobs:
     - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
       run: |
         mkdir -p ~/.ssh
-        grep cert-authority build.log | awk '{print $3, $4, $5, $6}' >> ~/.ssh/known_hosts
+        grep cert-authority build.log | awk '{print $2, $3, $4, $5}' >> ~/.ssh/known_hosts
         cat ~/.ssh/known_hosts
 
     - name: Bootstrap step ca
