@@ -50,27 +50,14 @@ jobs:
     #     sudo dpkg -i step-cli_amd64.deb
     #     which step
 
-    # - name: Build Docker
-    #   run: |
-    #     docker build -t step-ca --no-cache --progress=plain . 2>&1 | tee build.log
-
-    # - name: Setup Network
-    #   run: |
-    #     docker network create --subnet=172.18.0.0/16 mynet123
-    #     sudo echo "172.18.0.22 stepca" | sudo tee -a /etc/hosts
-
     - name: Startup step ca
       run: |
         vagrant up --provider=virtualbox 2>&1 | tee build.log
         vagrant ssh-config
-        ping -c1 192.168.56.10
-        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 22
-        vagrant ssh -- sudo cat /root/logs/step-ca.out
-        vagrant ssh -- sudo cat /root/logs/step-ca.err
-        vagrant ssh -- sudo cat /root/.scripts/step-ca.sh
-        vagrant ssh -- sudo cat /etc/systemd/system/step-ca.service
-        vagrant ssh -- systemctl status step-ca.service
-        echo -e '\x1dclose\x0d' | telnet 192.168.56.10 8443
+        sudo echo "192.168.56.10 stepca" | sudo tee -a /etc/hosts
+        ping -c1 stepca
+        echo -e '\x1dclose\x0d' | telnet stepca 22
+        echo -e '\x1dclose\x0d' | telnet stepca 8443
 
     # - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
     #   run: |
