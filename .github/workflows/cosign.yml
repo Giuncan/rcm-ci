@@ -28,7 +28,8 @@ jobs:
 
     - name: Sign image with a key
       run: |
-        cosign sign --yes --key env://COSIGN_PRIVATE_KEY Dockerfile
+        echo cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
+        cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
