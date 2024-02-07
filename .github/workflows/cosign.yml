@@ -30,6 +30,7 @@ jobs:
       run: |
         ls -ltr
         cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
+        cosign sign-blob --yes Vagrantfile
         ls -ltr
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
