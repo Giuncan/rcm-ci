@@ -30,12 +30,14 @@ jobs:
       run: |
         ls -ltr
         FILE2SIGN="Vagrantfile"
-        cosign sign-blob --yes --b64=false\
+        cosign sign-blob --help
+        cosign sign-blob --yes \
           --key env://COSIGN_PRIVATE_KEY "${FILE2SIGN}" \
           --output-certificate cert \
           --output-signature "${FILE2SIGN}.sig"
-        sleep 2
+        cosign verify-blob --key env://COSIGN_PUBLIC_KEY "${FILE2SIGN}"
         ls -ltr
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        COSIGN_PUBLIC_KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
