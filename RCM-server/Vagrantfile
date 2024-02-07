@@ -5,7 +5,12 @@ Vagrant.configure("2") do |config|
         config.ssh.insert_key = false
         config.vm.provision "shell", inline: <<-SHELL
             sudo dnf check-update
-            sudo dnf search python3 patch tar gzip unzip bzip2 xz zstd file lsb-release gnupg2 git svn hg python3-devel
+            sudo dnf install python3-devel patch tar gzip unzip bzip2 xz zstd file lsb_release gnupg2 git subversion mercurial
+        SHELL
+    end
+end
+
+
         #     sudo apt-get update
         #     sudo apt-get install -y wget openssh-server iputils-ping
         #     wget https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.deb
@@ -54,12 +59,9 @@ Vagrant.configure("2") do |config|
         #     sudo ufw status verbose
             
         #     cat /root/logs/step-ca.*
-        SHELL
+        # SHELL
         # config.vm.provision "shell", run: "always", inline: "systemctl start step-ca.service"
         # host.vm.network "private_network", ip: "192.168.56.10"
         # config.vm.network "forwarded_port", guest: 8443, host: 8443
         # host.vm.synced_folder "keys", "/keys"
-    end
-end
-
 
