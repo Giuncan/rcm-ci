@@ -32,9 +32,9 @@ jobs:
         FILE2SIGN="Vagrantfile"
         cosign sign-blob --yes \
           --key env://COSIGN_PRIVATE_KEY "${FILE2SIGN}" \
-          --output-certificate "${FILE2SIGN}.pem" \
+          --output-certificate cert.pem \
           --output-signature "${FILE2SIGN}.sig"
-        # cosign sign-blob --yes README.md
+        sleep 2
         ls -ltr
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
