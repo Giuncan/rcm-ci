@@ -29,8 +29,12 @@ jobs:
     - name: Sign image with a key
       run: |
         ls -ltr
-        cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
-        cosign sign-blob --yes Vagrantfile
+        FILE2SIGN="Vagrantfile"
+        cosign sign-blob --yes \
+          --key env://COSIGN_PRIVATE_KEY "${FILE2SIGN}" \
+          --output-certificate "${FILE2SIGN}.pem" \
+          --output-signature "${FILE2SIGN}.sig"
+        # cosign sign-blob --yes README.md
         ls -ltr
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
