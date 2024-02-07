@@ -28,8 +28,9 @@ jobs:
 
     - name: Sign image with a key
       run: |
-        echo cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
+        ls -ltr
         cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY README.md
+        ls -ltr
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
