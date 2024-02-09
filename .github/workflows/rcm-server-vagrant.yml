@@ -24,15 +24,6 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v4.1.1
 
-    # - name: Set up Python
-    #   uses: actions/setup-python@v5.0.0
-    #   with:
-    #     python-version: "3.10"
-
-    # - name: Install dependencies
-    #   run: |
-    #     pip install paramiko==3.4
-
     - name: Install vagrant
       run: |
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
@@ -44,40 +35,9 @@ jobs:
         sudo apt search virtualbox
         sudo apt install vagrant virtualbox
 
-    # - name: Install smallstep
-    #   run: |
-    #     wget https://dl.smallstep.com/cli/docs-cli-install/latest/step-cli_amd64.deb
-    #     sudo dpkg -i step-cli_amd64.deb
-    #     which step
-
     - name: Startup step ca
       run: |
         cd RCM-server
         vagrant up --provider=virtualbox 2>&1 | tee build.log
-        # vagrant ssh-config
-        # sudo echo "192.168.56.10 stepca" | sudo tee -a /etc/hosts
+        vagrant ssh-config
 
-    # - name: Add /root/.step/certs/ssh_host_ca_key.pub to .ssh/known_hosts
-    #   run: |
-    #     mkdir -p ~/.ssh
-    #     grep cert-authority build.log | awk '{print $2, $3, $4, $5}' >> ~/.ssh/known_hosts
-    #     cat ~/.ssh/known_hosts
-
-    # - name: Bootstrap step ca
-    #   run: |
-    #     FINGERPRINT=$(grep "Root fingerprint" build.log | awk '{print $NF}')
-    #     echo "${FINGERPRINT:?}"
-    #     step ca bootstrap --fingerprint "$FINGERPRINT" --ca-url=https://stepca:8443
-
-    # - name: Login
-    #   run: |
-    #     eval $(ssh-agent)
-    #     echo password > password.txt
-    #     step ssh login testuser --provisioner step-ca@example.com --password-file password.txt
-    #     ssh-add -l
-    #     ssh testuser@stepca 'echo SSH login successed'
-
-    #     python test_paramiko.py stepca testuser 22 None True || echo "failed as expected"
-    #     PARAMIKO_FILE="$(python -c "import paramiko, os; print(os.path.dirname(paramiko.__file__))")/auth_handler.py"
-    #     sed -i'.bak' -e 's/if key.public_blob:/if hasattr(key, "public_blob") and key.public_blob:/' $PARAMIKO_FILE
-    #     python test_paramiko.py stepca testuser 22 None True && echo "success as expected"

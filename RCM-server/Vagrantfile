@@ -1,84 +1,101 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
 Vagrant.configure("2") do |config|
-	config.vm.define "rcmserver" do |host|
-		host.vm.box = "generic/rhel9"
-		host.vm.hostname = "rcmserver"
-        config.ssh.insert_key = false
-        config.vm.provision "shell", inline: <<-SHELL
-            sudo dnf check-update
-            echo "--------------------------------------------"
-            sudo dnf search python3 gcc-gfortran redhat-lsb-core zstd git subversion
-            echo "--------------------------------------------"
-            # sudo dnf install \
-            #     curl \
-            #     findutils \
-            #     gcc-gfortran \
-            #     hostname \
-            #     iproute \
-            #     redhat-lsb-core \
-            #     python3 python3-pip python3-setuptools python3-boto3 \
-            #     patch \
-            #     tar gzip unzip bzip2 \
-            #     xz zstd \
-            #     file \
-            #     lsb_release \
-            #     gnupg2 \
-            #     git subversion mercurial
-        SHELL
-    end
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "almalinux/9"
+
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Disable the default share of the current code directory. Doing this
+  # provides improved isolation between the vagrant box and your host
+  # by making sure your Vagrantfile isn't accessible to the vagrant box.
+  # If you use this you may want to enable additional shared subfolders as
+  # shown above.
+  # config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  config.vm.provision "shell", env: {"SPACK_VERSION"=>ENV['SPACK_VERSION'], "RCM_BRANCH"=>ENV['RCM_BRANCH']}, inline: <<-SHELL
+      echo "SPACK_VERSION=${SPACK_VERSION:?}"
+      echo "RCM_BRANCH=${RCM_BRANCH:?}"
+      sudo dnf check-update
+      sudo dnf install -y epel-release
+      sudo dnf check-update
+      sudo dnf install -y \
+          curl \
+          findutils \
+          gcc-gfortran \
+          hostname \
+          iproute \
+          python3-devel python3-pip python3-setuptools python3-boto3 \
+          patch \
+          tar gzip unzip bzip2 \
+          xz zstd \
+          file \
+          lsb_release \
+          gnupg2 \
+          git subversion mercurial
+
+      git clone -c feature.manyFiles=true https://github.com/spack/spack.git -b "${SPACK_VERSION:?}"
+      . spack/share/spack/setup-env.sh
+      spack compiler find
+      git clone https://github.com/RemoteConnectionManager/RCM.git -b "${RCM_BRANCH:?}"
+      spack repo add RCM/spack/repo
+    SHELL
 end
-
-
-        #     sudo apt-get update
-        #     sudo apt-get install -y wget openssh-server iputils-ping
-        #     wget https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.deb
-        #     wget https://dl.smallstep.com/certificates/docs-ca-install/latest/step-ca_amd64.deb
-        #     sudo dpkg -i step-cli_amd64.deb
-        #     sudo dpkg -i step-ca_amd64.deb
-
-        #     # STEP
-        #     echo password > /root/password.txt
-        #     step ca init --ssh \
-        #                  --deployment-type standalone \
-        #                  --name step-ca-example \
-        #                  --dns stepca \
-        #                  --address :8443 \
-        #                  --provisioner step-ca@example.com \
-        #                  --password-file /root/password.txt
-        #     step ssh certificate stepca /etc/ssh/ssh_host_ecdsa_key.pub \
-        #                  --offline \
-        #                  --sign \
-        #                  --host \
-        #                  --password-file /root/password.txt \
-        #                  --provisioner step-ca@example.com
-
-        #     # CREATE USER
-        #     sudo adduser --quiet --disabled-password --gecos '' testuser 2>/dev/null
-
-        #     # SSH 
-        #     echo 'TrustedUserCAKeys /root/.step/certs/ssh_user_ca_key.pub' >> /etc/ssh/sshd_config && \
-        #     echo 'HostCertificate /etc/ssh/ssh_host_ecdsa_key-cert.pub' >> /etc/ssh/sshd_config
-        #     # echo 'HostKey /keys/ssh_host_ecdsa_key' >> /etc/ssh/sshd_config
-        #     service ssh restart
-
-        #     # ECHO root/.step/certs/ssh_host_ca_key.pub
-        #     echo 'Add following line to your local hosts ~/.ssh/known_hosts file to accept host certs' && \
-        #     echo "@cert-authority * $(cat /root/.step/certs/ssh_host_ca_key.pub | tr -d '\n')"
-            
-        #     # STEP CA SYSTEMCTL
-        #     mkdir -p /root/.scripts /root/logs
-        #     echo -e '#!/usr/bin/env bash\nstep-ca /root/.step/config/ca.json --password-file /root/password.txt 1>> /root/logs/step-ca.out 2>> /root/logs/step-ca.err\n' > /root/.scripts/step-ca.sh
-        #     echo -e '[Unit]\nDescription=Start step ca\nAfter=multi-user.target\n\n[Service]\nExecStart=/usr/bin/env bash /root/.scripts/step-ca.sh\nType=simple\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/step-ca.service
-        #     sudo systemctl daemon-reload
-        #     sudo systemctl enable step-ca.service --now
-        #     sudo systemctl status step-ca.service
-            
-        #     sudo ufw allow 8443
-        #     sudo ufw status verbose
-            
-        #     cat /root/logs/step-ca.*
-        # SHELL
-        # config.vm.provision "shell", run: "always", inline: "systemctl start step-ca.service"
-        # host.vm.network "private_network", ip: "192.168.56.10"
-        # config.vm.network "forwarded_port", guest: 8443, host: 8443
-        # host.vm.synced_folder "keys", "/keys"
-
