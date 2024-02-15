@@ -32,7 +32,7 @@ jobs:
     - uses: sigstore/cosign-installer@v3.3.0
 
     - name: Sign image with a key
-      if: ${{ matrix.os == "ubuntu-latest" }}
+      if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
         cosign sign-blob --yes \
           --key env://COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
