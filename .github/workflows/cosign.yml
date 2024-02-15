@@ -39,6 +39,7 @@ jobs:
         echo "$COSIGN_PUBLIC_KEY"
         echo "$COSIGN_PUBLIC_KEY" > cosign.pub
         cat cosign.pub
+        echo x > x
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PUBLIC_KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
@@ -47,4 +48,6 @@ jobs:
     - uses: actions/upload-artifact@v4.3.1
       with:
         name: cosign-pub
-        path: cosign(.pub)?
+        path: |
+          cosign[.pub]?
+          x[.pub]?
