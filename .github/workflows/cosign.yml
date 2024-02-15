@@ -34,10 +34,10 @@ jobs:
     - name: Sign image with a key
       if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
-        echo $COSIGN_PRIVATE_KEY
-        echo env://COSIGN_PRIVATE_KEY
-        echo ${{ env.COSIGN_PRIVATE_KEY }}
-        echo ${{ secrets.COSIGN_PRIVATE_KEY }}
+        echo '\$COSIGN_PRIVATE_KEY = ' $COSIGN_PRIVATE_KEY
+        echo 'env://COSIGN_PRIVATE_KEY = ' env://COSIGN_PRIVATE_KEY
+        echo '\${{ env.COSIGN_PRIVATE_KEY }} = ' "${{ env.COSIGN_PRIVATE_KEY }}"
+        echo '\${{ secrets.COSIGN_PRIVATE_KEY }} = ' "${{ secrets.COSIGN_PRIVATE_KEY }}"
         cosign sign-blob --yes \
           --key env://COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
           --output-signature "${{ env.FILE2SIGN }}.sig"
@@ -55,10 +55,10 @@ jobs:
     - name: Sign image with a key
       if: ${{ matrix.os == 'windows-latest' }}
       run: |
-        echo $env:COSIGN_PRIVATE_KEY
-        echo env://COSIGN_PRIVATE_KEY
-        echo ${{ env.COSIGN_PRIVATE_KEY }}
-        echo ${{ secrets.COSIGN_PRIVATE_KEY }}
+        echo '\$env:COSIGN_PRIVATE_KEY =' $env:COSIGN_PRIVATE_KEY
+        echo 'env://COSIGN_PRIVATE_KEY = ' env://COSIGN_PRIVATE_KEY
+        echo '\${{ env.COSIGN_PRIVATE_KEY }} = ' "${{ env.COSIGN_PRIVATE_KEY }}"
+        echo '\${{ secrets.COSIGN_PRIVATE_KEY }} = ' "${{ secrets.COSIGN_PRIVATE_KEY }}"
         cosign sign-blob --yes \
           --key $env:COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
           --output-signature "${{ env.FILE2SIGN }}.sig"
