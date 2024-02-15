@@ -59,9 +59,9 @@ jobs:
         Write-Output "`n======`ncosign syntax = env://COSIGN_PRIVATE_KEY `n======`n"
         Write-Output "`n======`ngithub env = ${{ env.COSIGN_PRIVATE_KEY }} `n======`n"
         Write-Output "`n======`ngithub secret  = ${{ secrets.COSIGN_PRIVATE_KEY }} `n======`n"
-        
+        Write-Output env://COSIGN_PRIVATE_KEY | Out-File -FilePath ./cosign.key
         cosign sign-blob --yes \
-          --key "env://COSIGN_PRIVATE_KEY" "${{ env.FILE2SIGN }}" \
+          --key cosign.key "${{ env.FILE2SIGN }}" \
           --output-signature "${{ env.FILE2SIGN }}.sig"
         echo $env:COSIGN_PUBLIC_KEY > cosign.pub
       env:
