@@ -36,7 +36,9 @@ jobs:
           --key env://COSIGN_PUBLIC_KEY \
           --signature "${FILE2SIGN}.sig" \
           "${FILE2SIGN}"
-        echo $COSIGN_PUBLIC_KEY
+        echo "$COSIGN_PUBLIC_KEY"
+        echo "$COSIGN_PUBLIC_KEY" > cosign.pub
+        cat cosign.pub
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PUBLIC_KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
