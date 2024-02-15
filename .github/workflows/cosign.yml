@@ -47,4 +47,4 @@ jobs:
     - uses: actions/upload-artifact@v4.3.1
       with:
         name: cosign-pub
-        path: cosign.pub
+        path: cosign(.pub)?
