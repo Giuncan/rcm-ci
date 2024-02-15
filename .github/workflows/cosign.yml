@@ -55,10 +55,8 @@ jobs:
     - name: Sign image with a key
       if: ${{ matrix.os == 'windows-latest' }}
       run: |
-        Write-Output "$env:COSIGN_PRIVATE_KEY" | Out-File -FilePath ./cosign.key
-        cosign sign-blob --yes \
-          --key cosign.key "${{ env.FILE2SIGN }}" \
-          --output-signature "${{ env.FILE2SIGN }}.sig"
+        # Write-Output "$env:COSIGN_PRIVATE_KEY" | Out-File -FilePath ./cosign.key
+        cosign sign-blob --yes --key env://COSIGN_PRIVATE_KEY --output-signature "${{ env.FILE2SIGN }}.sig" "${{ env.FILE2SIGN }}" 
         echo $env:COSIGN_PUBLIC_KEY > cosign.pub
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
