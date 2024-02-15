@@ -49,7 +49,7 @@ jobs:
         FILE2SIGN: "Vagrantfile"
 
     - name: Sign image with a key
-      if: ${{ matrix.os == windows-latest }}
+      if: ${{ matrix.os == 'windows-latest' }}
       run: |
         cosign sign-blob --yes \
           --key env://COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
