@@ -5,8 +5,8 @@ name: cosign
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   # pull_request:
   #   branches: [ "main" ]
 
@@ -36,6 +36,7 @@ jobs:
           --key env://COSIGN_PUBLIC_KEY \
           --signature "${FILE2SIGN}.sig" \
           "${FILE2SIGN}"
+        echo $COSIGN_PUBLIC_KEY
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PUBLIC_KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
