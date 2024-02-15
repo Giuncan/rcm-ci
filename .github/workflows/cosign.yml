@@ -19,10 +19,11 @@ on:
 jobs:
   compile:
     name: Compile site assets
-    matrix:
-      os:
-      - ubuntu-latest
-      - windows-latest
+    strategy:
+      matrix:
+        os:
+        - ubuntu-latest
+        - windows-latest
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout the repo
