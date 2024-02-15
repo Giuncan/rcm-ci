@@ -52,13 +52,13 @@ jobs:
       if: ${{ matrix.os == 'windows-latest' }}
       run: |
         cosign sign-blob --yes \
-          --key env://COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
+          --key $env:COSIGN_PRIVATE_KEY "${{ env.FILE2SIGN }}" \
           --output-signature "${{ env.FILE2SIGN }}.sig"
         cosign verify-blob \
-          --key env://COSIGN_PUBLIC_KEY \
+          --key $env:COSIGN_PUBLIC_KEY \
           --signature "${{ env.FILE2SIGN }}.sig" \
           "${{ env.FILE2SIGN }}"
-        echo env://COSIGN_PUBLIC_KEY > cosign.pub
+        echo $env:COSIGN_PUBLIC_KEY > cosign.pub
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PUBLIC_KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
