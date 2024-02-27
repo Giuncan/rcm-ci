@@ -16,7 +16,6 @@ jobs:
     - name: Generate Warning Annotations
       run: |
         url="https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        echo "::notice file=app.js,line=1,col=5,endColumn=7,title=Download artificat without login visiting the below url::$url."
         echo "::notice title=Download artificat without login visiting the below url::$url"
 
     
