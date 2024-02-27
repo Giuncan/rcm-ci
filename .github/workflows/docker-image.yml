@@ -19,7 +19,11 @@ jobs:
         text="This is a Warning, or isn't it? <a href='$url'>Press me</a>"
         # echo "::warning file=app.js,line=1,col=5::$text"
         # echo "::warning file=README.md,line=1,title=testing links::download-artifact $url"
-        echo "::warning file=app.js,line=1,col=5::You can visit [press me]($url) for more information."
+        echo "::notice file=app.js,line=1,col=5,endColumn=7::You can visit [press me]($url) for more information."
+        echo "::notice file=app.js,line=1,col=5,endColumn=7::You can visit $url for more information."
+        echo "::notice file=app.js,line=1,col=5,endColumn=7::You can visit <a href='$url'>Press me</a>" for more information."
+        echo "::notice file=app.js,line=1,col=5,endColumn=7,title=$url::You can visit <a href='$url'>Press me</a>" for more information."
+
 
 
     
