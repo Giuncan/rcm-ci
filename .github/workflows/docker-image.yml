@@ -23,6 +23,6 @@ jobs:
         omitBody: true
         omitBodyDuringUpdate: true
         prerelease: true
-        tag: "devel"
         artifacts: "x.aaa"
+        # tag: "devel"
         # token: ${{ secrets.GITHUB_TOKEN }}
