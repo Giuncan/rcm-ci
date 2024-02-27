@@ -12,21 +12,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
+    steps:   
+    - name: Generate Warning Annotations
+      run: |
+        text="This is a Warning, or isn't it? https://nightly.link/RemoteConnectionManager/RCM/actions/runs/${{ github.run_id }}"
+        echo "::warning file=app.js,line=1,col=5::$text"
     
     - name: Build the Docker image
       run: touch x.aaa
 
-    - uses: ncipollo/release-action@v1
+    - uses: actions/upload-artifact@v4
       with:
-        allowUpdates: true
-        omitName: true
-        omitBody: true
-        omitBodyDuringUpdate: true
-        prerelease: true
-        artifacts: "x.aaa"
-        commit: "9576db5"
-        tag: ""
-        # tag: "devel"
-        # token: ${{ secrets.GITHUB_TOKEN }}
+        path: x.aaa
+
+    
