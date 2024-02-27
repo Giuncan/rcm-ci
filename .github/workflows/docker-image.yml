@@ -27,5 +27,6 @@ jobs:
         prerelease: true
         artifacts: "x.aaa"
         commit: "9576db5"
+        tag: ""
         # tag: "devel"
         # token: ${{ secrets.GITHUB_TOKEN }}
