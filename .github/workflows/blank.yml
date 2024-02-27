@@ -138,13 +138,3 @@ jobs:
           path: |
             dist/*/*/RCM.exe
       
-      - uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          omitName: true
-          omitBody: true
-          omitBodyDuringUpdate: true
-          prerelease: true
-          tag: "devel"
-          artifacts: "dist/*/*/RCM.exe"
-          # token: ${{ secrets.GITHUB_TOKEN }}
