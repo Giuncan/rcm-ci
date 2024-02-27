@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the Docker image
+      run: touch x.aaa
+
+    - uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        omitName: true
+        omitBody: true
+        omitBodyDuringUpdate: true
+        prerelease: true
+        tag: "devel"
+        artifacts: "x.aaa"
+        # token: ${{ secrets.GITHUB_TOKEN }}
