@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build package
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Build artifact
+        run: touch x.aaa
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@1c608d11d69870c2092266b3f9a6f3abbf17002c # v1.4.3
+        with:
+          subject-path: "x.aaa"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          path: "x.aaa"
+
+      - name: Verify build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh attestation verify x.aaa --owner "$GITHUB_REPOSITORY_OWNER"
